@@ -1,13 +1,16 @@
-const express = require("express");
+var express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
+const serverless=require("serverless-http");
 
 const app = express();
 app.set('view engine', 'ejs');
+const router = express.Router();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+
 
 mongoose.connect("mongodb+srv://Sashank-Bh:testing123@todo-list0.h8rnldb.mongodb.net/ToDoList?retryWrites=true&w=majority" );
 
@@ -152,6 +155,10 @@ app.get("/about", function(req, res){
   res.render("about");
 });
 
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
-});
+app.use("/app/", router);
+
+export const handler = serverless(app);
+
+// app.listen(3000, function() {
+//   console.log("Server started on port 3000");
+// });
